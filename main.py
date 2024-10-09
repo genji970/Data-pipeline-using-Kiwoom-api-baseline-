@@ -18,8 +18,8 @@ class PyMon:
         self.get_code_list()
 
     def get_code_list(self):
-        self.kospi_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSPI)[300:600]
-        self.kosdaq_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSDAQ)[300:600]
+        self.kospi_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSPI)[0:500]
+        self.kosdaq_codes = self.kiwoom.get_code_list_by_market(MARKET_KOSDAQ)[0:500]
 
     def get_ohlcv(self, code, start):
         self.kiwoom.ohlcv = {'date': [], 'open': [], 'high': [], 'low': [], 'close': [], 'volume': []}
@@ -33,15 +33,15 @@ class PyMon:
 
     def save_to_csv(self, df, code):
         """데이터프레임을 csv 파일로 지정한 경로에 저장"""
-        save_path = 'C:/Users/home/Desktop/kosdaq_backtesting/'  # 원하는 저장 경로를 지정
+        save_path = 'C:/Users/home/Desktop/kosdaq/'  # 원하는 저장 경로를 지정
         if not os.path.exists(save_path):
             os.makedirs(save_path)  # 경로가 없으면 생성
-        file_name = f'{code}.csv'  # 종목코드를 파일명으로 지정
+        file_name = os.path.join(save_path, f'{code}.csv')  # 저장 경로와 파일명을 합쳐서 지정
         df.to_csv(file_name, encoding='utf-8-sig')  # CSV로 저장
         #print(f"Saved {file_name}")
 
     def check_speedy_rising_volume(self, code):
-        nBefore = 992
+        nBefore = 0
         PivotDatetime = datetime.datetime.now()
         before = PivotDatetime - datetime.timedelta(days=nBefore)
         today = before.strftime('%Y%m%d')
